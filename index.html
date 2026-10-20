@@ -420,16 +420,17 @@ texture;
 faceMesh.material.needsUpdate =
 true;*/
 
+const uv =
+faceMesh.geometry.attributes.uv;
 
+const arr = uv.array;
 
-const uv = faceMesh.geometry.attributes.uv;
-
-for(let i=0;i<10;i++){
-    console.log(
-      uv.getX(i),
-      uv.getY(i)
-    );
+for(let i=0;i<arr.length;i++){
+    arr[i] /= 1024;
 }
+
+uv.needsUpdate = true;
+    
     
 }
 };
