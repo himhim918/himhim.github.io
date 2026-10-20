@@ -462,7 +462,18 @@ console.log(
     map: faceMesh.material.map
 });
 console.log(
-  faceMesh.geometry.attributes
+    faceMesh.geometry.attributes.uv.normalized
+)
+    console.log(
+ faceMesh.geometry.attributes.uv.array.constructor.name
+);
+
+    console.log(
+ faceMesh.geometry.attributes.position.count
+);
+
+console.log(
+ faceMesh.geometry.attributes.uv.count
 );
     
 }
