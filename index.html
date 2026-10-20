@@ -382,16 +382,16 @@ box.height,
 debugFace.src =
 faceCanvas.toDataURL();
 
-const texture =
-new THREE.CanvasTexture(
+const  =
+new THREE.Canvas(
 faceCanvas
 );
 
-texture.flipY = false;
-texture.needsUpdate = true;
+.flipY = false;
+.needsUpdate = true;
 
 console.log(
-"Applying Texture"
+"Applying "
 );
 
 if(
@@ -404,7 +404,7 @@ faceMesh.material.forEach(
 (mat)=>{
 
 mat.map =
-texture;
+;
 
 mat.needsUpdate =
 true;
@@ -414,20 +414,16 @@ true;
 
 }else{
 
-faceMesh.material.map = texture;
-faceMesh.material.color.set(0xffffff);
+faceMesh.material.map = null;
 
-faceMesh.material.emissive =
-new THREE.Color(0xffffff);
-
-faceMesh.material.emissiveIntensity = 1;
+faceMesh.material.color.set(0xff0000);
 
 faceMesh.material.needsUpdate = true;
 
 }
 
 statusEl.innerText =
-"Texture Applied";
+" Applied";
 
 console.log(
 faceMesh.material
