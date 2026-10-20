@@ -419,17 +419,21 @@ texture;
 
 faceMesh.material.needsUpdate =
 true;*/
-
+for(let i=0;i<arr.length;i++){
+    arr[i] /= 512;
+}
 const uv =
 faceMesh.geometry.attributes.uv;
 
-const arr = uv.array;
+console.log(uv);
 
-for(let i=0;i<arr.length;i++){
-    arr[i] /= 1024;
-}
+console.log(
+    Math.max(...uv.array)
+);
 
-uv.needsUpdate = true;
+console.log(
+    Math.min(...uv.array)
+);
     
     
 }
