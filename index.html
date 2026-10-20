@@ -414,6 +414,40 @@ true;
 
 }else{
 
+/*faceMesh.material.map =
+texture;
+
+faceMesh.material.needsUpdate =
+true;*/
+
+    const canvas =
+document.createElement("canvas");
+
+canvas.width = 512;
+canvas.height = 512;
+
+const ctx =
+canvas.getContext("2d");
+
+ctx.fillStyle = "#ff0000";
+ctx.fillRect(0,0,512,512);
+
+const tex =
+new THREE.CanvasTexture(canvas);
+
+tex.needsUpdate = true;
+
+faceMesh.material.map = tex;
+
+faceMesh.material.color.set(0xffffff);
+
+faceMesh.material.needsUpdate = true;
+
+console.log(
+ faceMesh.material.map
+);
+    
+    
 console.log(faceMesh.geometry.attributes.uv);
 
 }
