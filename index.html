@@ -422,49 +422,40 @@ true;*/
 
 
 
-const testCanvas = document.createElement("canvas");
-testCanvas.width = 512;
-testCanvas.height = 512;
+const canvas =
+document.createElement("canvas");
 
-const ctx = testCanvas.getContext("2d");
+canvas.width = 1024;
+canvas.height = 1024;
+
+const ctx =
+canvas.getContext("2d");
+
+ctx.fillStyle = "white";
+ctx.fillRect(0,0,1024,1024);
 
 ctx.fillStyle = "red";
-ctx.fillRect(0,0,256,256);
+ctx.font = "300px Arial";
 
-ctx.fillStyle = "green";
-ctx.fillRect(256,0,256,256);
+ctx.fillText(
+  "TEST",
+  100,
+  500
+);
 
-ctx.fillStyle = "blue";
-ctx.fillRect(0,256,256,256);
+const tex =
+new THREE.CanvasTexture(canvas);
 
-ctx.fillStyle = "yellow";
-ctx.fillRect(256,256,256,256);
+tex.flipY = false;
 
-const tex = new THREE.CanvasTexture(testCanvas);
-
-tex.needsUpdate = true;
-
-faceMesh.material.color.set(0xffffff);
 faceMesh.material.map = tex;
-
 faceMesh.material.needsUpdate = true;
 
-    console.log(faceMesh.material.map);
-console.log(faceMesh.material.vertexColors);
-console.log(faceMesh.material.skinning);
-console.log(faceMesh.material.visible);
-
-    console.log(faceMesh.material);
-
-    document.body.appendChild(testCanvas);
-
-}
-
-statusEl.innerText =
-"Texture Applied";
+const uv =
+faceMesh.geometry.attributes.uv;
 
 console.log(
-faceMesh.material
+  uv.array.slice(0,20)
 );
 
 };
