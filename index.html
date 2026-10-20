@@ -414,11 +414,15 @@ true;
 
 }else{
 
-faceMesh.material.map =
-texture;
+faceMesh.material.map = texture;
+faceMesh.material.color.set(0xffffff);
 
-faceMesh.material.needsUpdate =
-true;
+faceMesh.material.emissive =
+new THREE.Color(0xffffff);
+
+faceMesh.material.emissiveIntensity = 1;
+
+faceMesh.material.needsUpdate = true;
 
 }
 
