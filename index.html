@@ -414,25 +414,21 @@ true;
 
 }else{
 
-/*faceMesh.material.map =
-texture;
+const oldUv = faceMesh.geometry.attributes.uv;
 
-faceMesh.material.needsUpdate =
-true;*/
+const newUv = new Float32Array(oldUv.count * 2);
 
-const uv =
-faceMesh.geometry.attributes.uv;
+for(let i=0;i<oldUv.count*2;i++){
+    newUv[i] = oldUv.array[i] / 4096;
+}
 
-console.log(uv);
-
-console.log(
-    Math.max(...uv.array)
+faceMesh.geometry.setAttribute(
+    'uv',
+    new THREE.BufferAttribute(newUv, 2)
 );
 
-console.log(
-    Math.min(...uv.array)
-);
-    
+faceMesh.material.map = texture;
+faceMesh.material.needsUpdate = true;
     
 }
 };
