@@ -414,29 +414,7 @@ true;
 
 }else{
 
-const testCanvas =
-document.createElement("canvas");
-
-testCanvas.width = 512;
-testCanvas.height = 512;
-
-const ctx =
-testCanvas.getContext("2d");
-
-ctx.fillStyle = "red";
-ctx.fillRect(0,0,256,256);
-
-ctx.fillStyle = "green";
-ctx.fillRect(256,0,256,256);
-
-ctx.fillStyle = "blue";
-ctx.fillRect(0,256,256,256);
-
-ctx.fillStyle = "yellow";
-ctx.fillRect(256,256,256,256);
-
-const tex =
-new THREE.CanvasTexture(testCanvas);
+console.log(faceMesh.geometry.attributes.uv);
 
 }
 
