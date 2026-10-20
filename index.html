@@ -414,17 +414,29 @@ true;
 
 }else{
 
-const texture =
-new THREE.CanvasTexture(faceCanvas);
+const testCanvas =
+document.createElement("canvas");
 
-texture.needsUpdate = true;
+testCanvas.width = 512;
+testCanvas.height = 512;
 
-faceMesh.material.color.set(0xffffff);
-faceMesh.material.map = texture;
+const ctx =
+testCanvas.getContext("2d");
 
-faceMesh.material.needsUpdate = true;
+ctx.fillStyle = "red";
+ctx.fillRect(0,0,256,256);
 
-console.log(faceMesh.material.map);
+ctx.fillStyle = "green";
+ctx.fillRect(256,0,256,256);
+
+ctx.fillStyle = "blue";
+ctx.fillRect(0,256,256,256);
+
+ctx.fillStyle = "yellow";
+ctx.fillRect(256,256,256,256);
+
+const tex =
+new THREE.CanvasTexture(testCanvas);
 
 }
 
