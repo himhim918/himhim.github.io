@@ -420,35 +420,43 @@ texture;
 faceMesh.material.needsUpdate =
 true;*/
 
-    const canvas =
-document.createElement("canvas");
 
-canvas.width = 512;
-canvas.height = 512;
 
-const ctx =
-canvas.getContext("2d");
+const testCanvas = document.createElement("canvas");
+testCanvas.width = 512;
+testCanvas.height = 512;
 
-ctx.fillStyle = "#ff0000";
-ctx.fillRect(0,0,512,512);
+const ctx = testCanvas.getContext("2d");
 
-const tex =
-new THREE.CanvasTexture(canvas);
+ctx.fillStyle = "red";
+ctx.fillRect(0,0,256,256);
+
+ctx.fillStyle = "green";
+ctx.fillRect(256,0,256,256);
+
+ctx.fillStyle = "blue";
+ctx.fillRect(0,256,256,256);
+
+ctx.fillStyle = "yellow";
+ctx.fillRect(256,256,256,256);
+
+const tex = new THREE.CanvasTexture(testCanvas);
 
 tex.needsUpdate = true;
 
-faceMesh.material.map = tex;
-
 faceMesh.material.color.set(0xffffff);
+faceMesh.material.map = tex;
 
 faceMesh.material.needsUpdate = true;
 
-console.log(
- faceMesh.material.map
-);
-    
-    
-console.log(faceMesh.geometry.attributes.uv);
+    console.log(faceMesh.material.map);
+console.log(faceMesh.material.vertexColors);
+console.log(faceMesh.material.skinning);
+console.log(faceMesh.material.visible);
+
+    console.log(faceMesh.material);
+
+    document.body.appendChild(testCanvas);
 
 }
 
