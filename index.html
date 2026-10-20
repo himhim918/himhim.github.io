@@ -414,11 +414,17 @@ true;
 
 }else{
 
-faceMesh.material.map = null;
+const texture =
+new THREE.CanvasTexture(faceCanvas);
 
-faceMesh.material.color.set(0xff0000);
+texture.needsUpdate = true;
+
+faceMesh.material.color.set(0xffffff);
+faceMesh.material.map = texture;
 
 faceMesh.material.needsUpdate = true;
+
+console.log(faceMesh.material.map);
 
 }
 
