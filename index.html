@@ -422,59 +422,14 @@ true;*/
 
 
 
-const canvas =
-document.createElement("canvas");
+const uv = faceMesh.geometry.attributes.uv;
 
-canvas.width = 1024;
-canvas.height = 1024;
-
-const ctx =
-canvas.getContext("2d");
-
-ctx.fillStyle = "white";
-ctx.fillRect(0,0,1024,1024);
-
-ctx.fillStyle = "red";
-ctx.font = "300px Arial";
-
-ctx.fillText(
-  "TEST",
-  100,
-  500
-);
-
-const tex =
-new THREE.CanvasTexture(canvas);
-
-tex.flipY = false;
-
-faceMesh.material.map = tex;
-faceMesh.material.needsUpdate = true;
-
-const uv =
-faceMesh.geometry.attributes.uv;
-
-console.log(
-  uv.array.slice(0,20)
-);
-
-    faceMesh.material = new THREE.MeshBasicMaterial({
-    map: faceMesh.material.map
-});
-console.log(
-    faceMesh.geometry.attributes.uv.normalized
-)
+for(let i=0;i<10;i++){
     console.log(
- faceMesh.geometry.attributes.uv.array.constructor.name
-);
-
-    console.log(
- faceMesh.geometry.attributes.position.count
-);
-
-console.log(
- faceMesh.geometry.attributes.uv.count
-);
+      uv.getX(i),
+      uv.getY(i)
+    );
+}
     
 }
 };
