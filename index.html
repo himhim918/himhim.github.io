@@ -457,6 +457,14 @@ faceMesh.geometry.attributes.uv;
 console.log(
   uv.array.slice(0,20)
 );
+
+    faceMesh.material = new THREE.MeshBasicMaterial({
+    map: faceMesh.material.map
+});
+console.log(
+  faceMesh.geometry.attributes
+);
+    
 }
 };
 
