@@ -425,10 +425,10 @@ faceCtx.fillRect(
 );
 
 const sx = minX;
-const sy = minY + cropH * 0.25;
+const sy = minY + cropH * 0.10;
 
 const sw = cropW;
-const sh = cropH * 0.55;
+const sh = cropH * 0.80;
 
 faceCtx.drawImage(
     captureCanvas,
@@ -477,33 +477,18 @@ atlasCtx.fillRect(
 atlasCtx.drawImage(
     faceCanvas,
     1200,
-    1850,
+    1500,
     1500,
     1500
 );
 
-atlasCtx.strokeStyle = "yellow";
-atlasCtx.lineWidth = 20;
-
-atlasCtx.beginPath();
-atlasCtx.moveTo(2048,0);
-atlasCtx.lineTo(2048,4096);
-atlasCtx.stroke();
-
-atlasCtx.beginPath();
-atlasCtx.moveTo(0,2048);
-atlasCtx.lineTo(4096,2048);
-atlasCtx.stroke();
-
-debugFace.src =
-atlas.toDataURL();
     
 const texture =
 new THREE.CanvasTexture(
     atlas
 );
 
-texture.flipY = true;
+texture.flipY = false;
 texture.needsUpdate = true;
 
 console.log(
