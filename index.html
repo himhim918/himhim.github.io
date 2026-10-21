@@ -337,18 +337,6 @@ alert(
 "No face detected"
 );
 
-faceCtx.drawImage(
-    captureCanvas,
-    box.originX,
-    box.originY,
-    box.width,
-    box.height,
-
-    1000,
-    800,
-    1600,
-    1800
-);
 
     
 return;
@@ -370,6 +358,19 @@ const faceCtx =
 faceCanvas.getContext("2d");
 
 faceCtx.drawImage(
+    captureCanvas,
+    box.originX,
+    box.originY,
+    box.width,
+    box.height,
+
+    1000,
+    800,
+    1600,
+    1800
+);
+
+    faceCtx.drawImage(
     captureCanvas,
     box.originX,
     box.originY,
