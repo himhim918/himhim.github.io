@@ -476,20 +476,24 @@ atlasCtx.fillRect(
 
 atlasCtx.drawImage(
     faceCanvas,
-    1200,   // x
-    1300,   // y
-    1500,   // w
-    1500    // h
+    1200,
+    1850,
+    1500,
+    1500
 );
 
-atlasCtx.fillStyle="red";
-atlasCtx.fillRect(0,0,4096,300);
+atlasCtx.strokeStyle = "yellow";
+atlasCtx.lineWidth = 20;
 
-atlasCtx.fillStyle="green";
-atlasCtx.fillRect(0,1800,4096,300);
+atlasCtx.beginPath();
+atlasCtx.moveTo(2048,0);
+atlasCtx.lineTo(2048,4096);
+atlasCtx.stroke();
 
-atlasCtx.fillStyle="blue";
-atlasCtx.fillRect(0,3500,4096,300);
+atlasCtx.beginPath();
+atlasCtx.moveTo(0,2048);
+atlasCtx.lineTo(4096,2048);
+atlasCtx.stroke();
 
 debugFace.src =
 atlas.toDataURL();
