@@ -424,14 +424,18 @@ faceCtx.fillRect(
     1024
 );
 
+const sx = minX;
+const sy = minY + cropH * 0.15;
+
+const sw = cropW;
+const sh = cropH * 0.70;
+
 faceCtx.drawImage(
     captureCanvas,
-
-    minX,
-    minY,
-    cropW,
-    cropH,
-
+    sx,
+    sy,
+    sw,
+    sh,
     0,
     0,
     1024,
