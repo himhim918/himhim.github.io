@@ -453,7 +453,7 @@ captureCtx.strokeRect(
 );
 
 debugFace.src =
-faceCanvas.toDataURL();
+atlas.toDataURL();
 
 const atlas =
 document.createElement("canvas");
@@ -482,16 +482,22 @@ atlasCtx.drawImage(
     1500    // h
 );
 
+atlasCtx.fillStyle="red";
+atlasCtx.fillRect(0,0,4096,300);
+
+atlasCtx.fillStyle="green";
+atlasCtx.fillRect(0,1800,4096,300);
+
+atlasCtx.fillStyle="blue";
+atlasCtx.fillRect(0,3500,4096,300);
+
 
 const texture =
 new THREE.CanvasTexture(
     atlas
 );
 
-texture.flipY = false;
-texture.needsUpdate = true;
-
-texture.flipY = false;
+texture.flipY = true;
 texture.needsUpdate = true;
 
 console.log(
