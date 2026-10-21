@@ -436,10 +436,10 @@ faceCtx.drawImage(
     sy,
     sw,
     sh,
-    0,
-    0,
-    1024,
-    1024
+    100,
+    50,
+    824,
+    924
 );
 
 captureCtx.strokeStyle="red";
@@ -464,6 +464,9 @@ atlas.height = 4096;
 const atlasCtx =
 atlas.getContext("2d");
 
+debugFace.src =
+atlas.toDataURL();
+    
 atlasCtx.fillStyle =
 "#808080";
 
@@ -476,10 +479,10 @@ atlasCtx.fillRect(
 
 atlasCtx.drawImage(
     faceCanvas,
+    1350,
+    2200,
     1200,
-    1500,
-    1500,
-    1500
+    1400
 );
 
     
