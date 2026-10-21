@@ -425,10 +425,10 @@ faceCtx.fillRect(
 );
 
 const sx = minX;
-const sy = minY + cropH * 0.15;
+const sy = minY + cropH * 0.25;
 
 const sw = cropW;
-const sh = cropH * 0.70;
+const sh = cropH * 0.55;
 
 faceCtx.drawImage(
     captureCanvas,
@@ -453,7 +453,7 @@ captureCtx.strokeRect(
 );
 
 debugFace.src =
-captureCanvas.toDataURL();
+faceCanvas.toDataURL();
 
 const atlas =
 document.createElement("canvas");
@@ -476,12 +476,10 @@ atlasCtx.fillRect(
 
 atlasCtx.drawImage(
     faceCanvas,
-
-    1100,
-    650,
-
-    1800,
-    1800
+    1250,   // x
+    950,    // y
+    1500,   // width
+    1700    // height
 );
 
 
