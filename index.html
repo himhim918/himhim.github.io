@@ -62,16 +62,25 @@ button{
         muted>
     </video>
 
-    <button id="captureBtn">
+   <button id="captureBtn">
     Generate Face Texture
 </button>
 
-<button onclick="changeEmoji('😀')">😀</button>
-<button onclick="changeEmoji('😄')">😄</button>
-<button onclick="changeEmoji('😎')">😎</button>
-<button onclick="changeEmoji('🤡')">🤡</button>
-<button onclick="changeEmoji('👻')">👻</button>
+<button onclick="setExpression('smile')">
+😄 Smile
+</button>
 
+<button onclick="setExpression('open')">
+😮 Open
+</button>
+
+<button onclick="setExpression('wink')">
+😉 Wink
+</button>
+
+<button onclick="setExpression('reset')">
+🙂 Reset
+</button>
 
     <div id="status">
         Loading...
@@ -115,59 +124,8 @@ const captureCtx =
     captureCanvas.getContext("2d");
 
 let faceMesh = null;
-function createEmojiTexture(emoji){
+let originalPositions = null;
 
-    const canvas =
-        document.createElement("canvas");
-
-    canvas.width = 1024;
-    canvas.height = 1024;
-
-    const ctx =
-        canvas.getContext("2d");
-
-    ctx.fillStyle = "white";
-    ctx.fillRect(
-        0,
-        0,
-        1024,
-        1024
-    );
-
-    ctx.font = "800px serif";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-
-    ctx.fillText(
-        emoji,
-        512,
-        512
-    );
-
-    const texture =
-        new THREE.CanvasTexture(
-            canvas
-        );
-
-    texture.needsUpdate = true;
-
-    return texture;
-}
-
-window.changeEmoji =
-function(emoji){
-
-    if(!faceMesh)
-        return;
-
-    faceMesh.material.map =
-        createEmojiTexture(
-            emoji
-        );
-
-    faceMesh.material.needsUpdate =
-        true;
-};
 /* ---------------------- */
 /* THREE */
 /* ---------------------- */
@@ -278,7 +236,86 @@ statusEl.innerText =
 /* ---------------------- */
 /* TRIANGLE BUILDER */
 /* ---------------------- */
+window.setExpression =
+function(type){
 
+    if(!faceMesh)
+        return;
+
+    const pos =
+        faceMesh.geometry.attributes.position;
+
+    if(type==="reset"){
+
+        if(originalPositions){
+
+            pos.array.set(
+                originalPositions
+            );
+
+            pos.needsUpdate =
+                true;
+
+            return;
+        }
+    }
+
+    if(!originalPositions){
+
+        originalPositions =
+            new Float32Array(
+                pos.array
+            );
+    }
+
+    pos.array.set(
+        originalPositions
+    );
+
+    if(type==="smile"){
+
+        pos.setX(
+            61,
+            pos.getX(61)-0.05
+        );
+
+        pos.setX(
+            291,
+            pos.getX(291)+0.05
+        );
+    }
+
+    if(type==="open"){
+
+        pos.setY(
+            13,
+            pos.getY(13)-0.06
+        );
+
+        pos.setY(
+            14,
+            pos.getY(14)+0.06
+        );
+    }
+
+    if(type==="wink"){
+
+        pos.setY(
+            159,
+            pos.getY(159)+0.02
+        );
+
+        pos.setY(
+            145,
+            pos.getY(145)-0.02
+        );
+    }
+
+    pos.needsUpdate =
+        true;
+};
+
+    
 function buildTriangles(edges){
 
     const adj =
@@ -413,9 +450,9 @@ async ()=>{
     geometry.computeVertexNormals();
 
     const texture =
-    createEmojiTexture(
-        "😀"
-    );
+        new THREE.CanvasTexture(
+            captureCanvas
+        );
 
     texture.flipY = false;
     texture.needsUpdate = true;
@@ -442,6 +479,10 @@ async ()=>{
             geometry,
             material
         );
+    originalPositions =
+    new Float32Array(
+        geometry.attributes.position.array
+    );
 
     scene.add(
         faceMesh
