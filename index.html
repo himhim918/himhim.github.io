@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>FaceCap Photo Prototype</title>
+<title>FaceCap User Head Spawn</title>
 
 <style>
 html,body{
@@ -11,7 +11,6 @@ html,body{
     height:100%;
     overflow:hidden;
     background:#111;
-    font-family:Arial,sans-serif;
 }
 
 #ui{
@@ -20,34 +19,26 @@ html,body{
     left:10px;
     z-index:1000;
     background:rgba(0,0,0,.8);
+    color:white;
     padding:12px;
     border-radius:12px;
-    color:white;
 }
 
 #video{
     width:280px;
-    transform:scaleX(-1);
     display:block;
+    transform:scaleX(-1);
     border-radius:8px;
 }
 
 button{
     width:280px;
+    height:40px;
     margin-top:8px;
-    height:42px;
-    cursor:pointer;
 }
 
 #status{
     margin-top:8px;
-    font-size:14px;
-}
-
-#debugFace{
-    width:280px;
-    margin-top:8px;
-    border-radius:8px;
 }
 </style>
 
@@ -68,19 +59,17 @@ button{
 <video
 id="video"
 autoplay
-playsinline
 muted
+playsinline
 ></video>
 
 <button id="captureBtn">
-Take Photo And Apply Face
+Take Selfie Head
 </button>
 
 <div id="status">
 Loading...
 </div>
-
-<img id="debugFace"/>
 
 </div>
 
@@ -99,17 +88,11 @@ GLTFLoader
 } from "three/addons/loaders/GLTFLoader.js";
 
 import {
-KTX2Loader
-} from "three/addons/loaders/KTX2Loader.js";
-
-import {
-MeshoptDecoder
-} from "three/addons/libs/meshopt_decoder.module.js";
-
-import {
-FaceDetector,
+FaceLandmarker,
 FilesetResolver
-} from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14";
+}
+from
+"https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14";
 
 const video =
 document.getElementById("video");
@@ -120,9 +103,6 @@ document.getElementById("captureBtn");
 const statusEl =
 document.getElementById("status");
 
-const debugFace =
-document.getElementById("debugFace");
-
 const captureCanvas =
 document.getElementById("captureCanvas");
 
@@ -130,6 +110,7 @@ const captureCtx =
 captureCanvas.getContext("2d");
 
 let faceMesh = null;
+let selfieHead = null;
 
 const scene =
 new THREE.Scene();
@@ -147,8 +128,8 @@ window.innerWidth/window.innerHeight,
 
 camera.position.set(
 0,
-0,
-2.6
+0.2,
+2.5
 );
 
 const renderer =
@@ -176,7 +157,7 @@ controls.enableDamping = true;
 scene.add(
 new THREE.HemisphereLight(
 0xffffff,
-0x666666,
+0x777777,
 2
 )
 );
@@ -188,35 +169,22 @@ new THREE.DirectionalLight(
 );
 
 dirLight.position.set(
-2,2,3
+2,
+2,
+3
 );
 
 scene.add(
 dirLight
 );
 
-const gltfLoader =
+const loader =
 new GLTFLoader();
 
-gltfLoader.setMeshoptDecoder(
-MeshoptDecoder
-);
-
-const ktx2Loader =
-new KTX2Loader();
-
-ktx2Loader.setTranscoderPath(
-"https://unpkg.com/three@0.170.0/examples/jsm/libs/basis/"
-);
-
-gltfLoader.setKTX2Loader(
-ktx2Loader
-);
-
 statusEl.innerText =
-"Loading facecap.glb...";
+"loading facecap...";
 
-gltfLoader.load(
+loader.load(
 "./facecap.glb",
 
 (gltf)=>{
@@ -225,43 +193,32 @@ scene.add(
 gltf.scene
 );
 
-gltf.scene.traverse(
-
-(obj)=>{
-
-if(
-!obj.isMesh
-) return;
-
-const count =
-obj.geometry.attributes.position.count;
-
-console.log(
-obj.name,
-count
+gltf.scene.scale.set(
+1,
+1,
+1
 );
 
+gltf.scene.traverse((obj)=>{
+
+if(!obj.isMesh) return;
+
 if(
-count === 2694
+obj.geometry.attributes.position &&
+obj.geometry.attributes.position.count === 2694
 ){
+    faceMesh = obj;
 
-faceMesh =
-obj;
-
-window.faceMesh =
-obj;
-
-console.log(
-"FOUND FACECAP FACE",
-obj
-);
-
-statusEl.innerText =
-"FaceCap Ready";
-
+    console.log(
+    "facemesh found",
+    obj
+    );
 }
 
 });
+
+statusEl.innerText =
+"FaceCap Ready";
 
 }
 );
@@ -271,43 +228,38 @@ await FilesetResolver.forVisionTasks(
 "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm"
 );
 
-const faceDetector =
-await FaceDetector.createFromOptions(
+const faceLandmarker =
+await FaceLandmarker.createFromOptions(
 vision,
 {
 baseOptions:{
 modelAssetPath:
-"https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/latest/blaze_face_short_range.tflite"
-}
+"https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/latest/face_landmarker.task"
+},
+outputFaceBlendshapes:true,
+outputFacialTransformationMatrixes:true,
+numFaces:1
 }
 );
 
 const stream =
-await navigator.mediaDevices.getUserMedia({
+await navigator.mediaDevices.getUserMedia(
+{
 video:{
 facingMode:"user",
 width:1280,
 height:720
 }
-});
+}
+);
 
-video.srcObject =
-stream;
+video.srcObject = stream;
 
 statusEl.innerText =
 "Camera Ready";
 
 captureBtn.onclick =
 async ()=>{
-
-if(!faceMesh){
-
-alert(
-"FaceCap not loaded"
-);
-
-return;
-}
 
 captureCanvas.width =
 video.videoWidth;
@@ -321,17 +273,14 @@ video,
 0
 );
 
-statusEl.innerText =
-"Detecting face...";
-
 const result =
-await faceDetector.detect(
+faceLandmarker.detect(
 captureCanvas
 );
 
 if(
-!result.detections ||
-result.detections.length===0
+!result.faceLandmarks ||
+result.faceLandmarks.length === 0
 ){
 alert(
 "No face detected"
@@ -339,14 +288,44 @@ alert(
 return;
 }
 
-const box =
-result.detections[0]
-.boundingBox;
+const landmarks =
+result.faceLandmarks[0];
+
+let minX=999;
+let minY=999;
+let maxX=0;
+let maxY=0;
+
+for(const p of landmarks){
+
+minX =
+Math.min(minX,p.x);
+
+minY =
+Math.min(minY,p.y);
+
+maxX =
+Math.max(maxX,p.x);
+
+maxY =
+Math.max(maxY,p.y);
+
+}
+
+const sx =
+minX * captureCanvas.width;
+
+const sy =
+minY * captureCanvas.height;
+
+const sw =
+(maxX-minX) * captureCanvas.width;
+
+const sh =
+(maxY-minY) * captureCanvas.height;
 
 const faceCanvas =
-document.createElement(
-"canvas"
-);
+document.createElement("canvas");
 
 faceCanvas.width = 1024;
 faceCanvas.height = 1024;
@@ -365,103 +344,79 @@ faceCtx.fillRect(
 );
 
 faceCtx.drawImage(
-
 captureCanvas,
-
-box.originX,
-box.originY,
-box.width,
-box.height,
-
-150,
-100,
-724,
-824
+sx,
+sy,
+sw,
+sh,
+0,
+0,
+1024,
+1024
 );
-
-debugFace.src =
-faceCanvas.toDataURL();
 
 const texture =
 new THREE.CanvasTexture(
 faceCanvas
 );
 
-texture.flipY = false;
 texture.needsUpdate = true;
 
-console.log(
-"Applying Texture"
+if(selfieHead){
+
+selfieHead.parent?.remove(
+selfieHead
 );
 
-if(
-Array.isArray(
-faceMesh.material
-)
-){
-
-faceMesh.material.forEach(
-(mat)=>{
-
-mat.map =
-texture;
-
-mat.needsUpdate =
-true;
-
 }
+
+const plane =
+new THREE.Mesh(
+
+new THREE.PlaneGeometry(
+0.55,
+0.70
+),
+
+new THREE.MeshBasicMaterial({
+map:texture,
+transparent:true
+})
+
+);
+
+selfieHead = plane;
+
+if(faceMesh){
+
+faceMesh.add(
+plane
+);
+
+plane.position.set(
+0,
+0.02,
+0.08
 );
 
 }else{
 
-const oldUv = faceMesh.geometry.attributes.uv;
-
-const newUv = new Float32Array(oldUv.count * 2);
-
-for(let i=0;i<oldUv.count*2;i++){
-    newUv[i] = oldUv.array[i] / 4096;
-}
-
-faceMesh.geometry.setAttribute(
-    'uv',
-    new THREE.BufferAttribute(newUv, 2)
+scene.add(
+plane
 );
 
-faceMesh.material.map = texture;
-faceMesh.material.needsUpdate = true;
-    
+plane.position.set(
+0,
+0,
+0
+);
+
 }
+
+statusEl.innerText =
+"Selfie Head Spawned";
+
 };
-
-function morph(
-name,
-value
-){
-
-if(
-!faceMesh
-) return;
-
-const dict =
-faceMesh.morphTargetDictionary;
-
-if(
-!dict
-) return;
-
-if(
-dict[name]===undefined
-) return;
-
-faceMesh
-.morphTargetInfluences[
-dict[name]
-] = value;
-
-}
-
-const clock =
-new THREE.Clock();
 
 function animate(){
 
@@ -470,40 +425,6 @@ animate
 );
 
 controls.update();
-
-const t =
-clock.getElapsedTime();
-
-morph(
-"jawOpen",
-(Math.sin(t*2)+1)*0.5
-);
-
-morph(
-"eyeBlink_L",
-Math.max(
-0,
-Math.sin(t*4)
-)
-);
-
-morph(
-"eyeBlink_R",
-Math.max(
-0,
-Math.sin(t*4)
-)
-);
-
-morph(
-"mouthSmile_L",
-(Math.sin(t)+1)*0.3
-);
-
-morph(
-"mouthSmile_R",
-(Math.sin(t)+1)*0.3
-);
 
 renderer.render(
 scene,
@@ -519,7 +440,7 @@ window.addEventListener(
 ()=>{
 
 camera.aspect =
-window.innerWidth /
+window.innerWidth/
 window.innerHeight;
 
 camera.updateProjectionMatrix();
