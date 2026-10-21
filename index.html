@@ -293,30 +293,76 @@ vertices,
 )
 );
 
+const positions = [];
+const uvs = [];
+
+for(const p of landmarks){
+
+    positions.push(
+        (p.x - 0.5) * 2,
+        -(p.y - 0.5) * 2,
+        p.z * 2
+    );
+
+    uvs.push(
+        p.x,
+        1 - p.y
+    );
+}
+
+const geometry =
+new THREE.BufferGeometry();
+
+geometry.setAttribute(
+    "position",
+    new THREE.Float32BufferAttribute(
+        positions,
+        3
+    )
+);
+
+geometry.setAttribute(
+    "uv",
+    new THREE.Float32BufferAttribute(
+        uvs,
+        2
+    )
+);
+
+const texture =
+new THREE.CanvasTexture(
+    captureCanvas
+);
+
+texture.needsUpdate = true;
+
 const material =
-new THREE.LineBasicMaterial({
-color:0x00ff88
+new THREE.PointsMaterial({
+
+    map:texture,
+
+    size:0.02,
+
+    transparent:true,
+
+    alphaTest:0.01
+
 });
 
 if(faceWireframe){
 
-scene.remove(
-faceWireframe
-);
-
-faceWireframe.geometry.dispose();
-faceWireframe.material.dispose();
+    scene.remove(faceWireframe);
 
 }
 
 faceWireframe =
-new THREE.LineSegments(
-geometry,
-material
+new THREE.Points(
+    geometry,
+    material
 );
 
 scene.add(
-faceWireframe
+    faceWireframe
 );
 
 statusEl.innerText =
