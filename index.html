@@ -442,6 +442,23 @@ faceCtx.drawImage(
     924
 );
 
+faceCtx.globalCompositeOperation =
+"destination-in";
+
+faceCtx.beginPath();
+
+faceCtx.ellipse(
+    512,
+    520,
+    380,
+    460,
+    0,
+    0,
+    Math.PI * 2
+);
+
+faceCtx.fill();
+
 captureCtx.strokeStyle="red";
 captureCtx.lineWidth=8;
 
@@ -451,6 +468,7 @@ captureCtx.strokeRect(
     cropW,
     cropH
 );
+    faceCtx.filter = "blur(8px)";
 
 debugFace.src =
 faceCanvas.toDataURL();
