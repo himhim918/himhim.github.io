@@ -337,14 +337,18 @@ alert(
 "No face detected"
 );
 
-scene.traverse((obj)=>{
-    if(obj.isMesh){
-        console.log(
-        obj.name,
-        obj.material.map
-    );
-    }
-});
+faceCtx.drawImage(
+    captureCanvas,
+    box.originX,
+    box.originY,
+    box.width,
+    box.height,
+
+    1000,
+    800,
+    1600,
+    1800
+);
 
     
 return;
@@ -359,12 +363,25 @@ document.createElement(
 "canvas"
 );
 
-faceCanvas.width = 1024;
-faceCanvas.height = 1024;
+faceCanvas.width = 4096;
+faceCanvas.height = 4096;
 
 const faceCtx =
 faceCanvas.getContext("2d");
 
+faceCtx.drawImage(
+    captureCanvas,
+    box.originX,
+    box.originY,
+    box.width,
+    box.height,
+
+    1000,
+    800,
+    1600,
+    1800
+);
+    
 faceCtx.fillStyle =
 "#808080";
 
