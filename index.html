@@ -66,20 +66,12 @@ button{
     Generate Face Texture
 </button>
 
-<button onclick="setExpression('smile')">
-😄 Smile
+<button onclick="setExpression('normal')">
+🙂 Normal
 </button>
 
-<button onclick="setExpression('open')">
-😮 Open
-</button>
-
-<button onclick="setExpression('wink')">
-😉 Wink
-</button>
-
-<button onclick="setExpression('reset')">
-🙂 Reset
+<button onclick="setExpression('angry')">
+😠 Angry
 </button>
 
     <div id="status">
@@ -245,74 +237,47 @@ function(type){
     const pos =
         faceMesh.geometry.attributes.position;
 
-    if(type==="reset"){
+    if(type === "normal"){
 
-        if(originalPositions){
+        pos.array.set(
+            originalPositions
+        );
 
-            pos.array.set(
-                originalPositions
-            );
+        pos.needsUpdate = true;
 
-            pos.needsUpdate =
-                true;
-
-            return;
-        }
-    }
-
-    if(!originalPositions){
-
-        originalPositions =
-            new Float32Array(
-                pos.array
-            );
+        return;
     }
 
     pos.array.set(
         originalPositions
     );
 
-    if(type==="smile"){
+    if(type === "angry"){
 
-        pos.setX(
-            61,
-            pos.getX(61)-0.05
-        );
+        // left eyebrow
+        pos.setY(70, pos.getY(70) - 0.25);
+        pos.setY(63, pos.getY(63) - 0.20);
 
-        pos.setX(
-            291,
-            pos.getX(291)+0.05
-        );
+        // right eyebrow
+        pos.setY(300, pos.getY(300) - 0.25);
+        pos.setY(293, pos.getY(293) - 0.20);
+
+        // eyes squint
+        pos.setY(159, pos.getY(159) + 0.10);
+        pos.setY(145, pos.getY(145) - 0.10);
+
+        pos.setY(386, pos.getY(386) + 0.10);
+        pos.setY(374, pos.getY(374) - 0.10);
+
+        // mouth corners down
+        pos.setY(61, pos.getY(61) + 0.15);
+        pos.setY(291, pos.getY(291) + 0.15);
+
+        // chin forward
+        pos.setY(152, pos.getY(152) + 0.10);
     }
 
-    if(type==="open"){
-
-        pos.setY(
-            13,
-            pos.getY(13)-0.06
-        );
-
-        pos.setY(
-            14,
-            pos.getY(14)+0.06
-        );
-    }
-
-    if(type==="wink"){
-
-        pos.setY(
-            159,
-            pos.getY(159)+0.02
-        );
-
-        pos.setY(
-            145,
-            pos.getY(145)-0.02
-        );
-    }
-
-    pos.needsUpdate =
-        true;
+    pos.needsUpdate = true;
 };
 
     
