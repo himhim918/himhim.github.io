@@ -63,8 +63,15 @@ button{
     </video>
 
     <button id="captureBtn">
-        Generate Face Texture
-    </button>
+    Generate Face Texture
+</button>
+
+<button onclick="changeEmoji('😀')">😀</button>
+<button onclick="changeEmoji('😄')">😄</button>
+<button onclick="changeEmoji('😎')">😎</button>
+<button onclick="changeEmoji('🤡')">🤡</button>
+<button onclick="changeEmoji('👻')">👻</button>
+
 
     <div id="status">
         Loading...
@@ -108,7 +115,59 @@ const captureCtx =
     captureCanvas.getContext("2d");
 
 let faceMesh = null;
+function createEmojiTexture(emoji){
 
+    const canvas =
+        document.createElement("canvas");
+
+    canvas.width = 1024;
+    canvas.height = 1024;
+
+    const ctx =
+        canvas.getContext("2d");
+
+    ctx.fillStyle = "white";
+    ctx.fillRect(
+        0,
+        0,
+        1024,
+        1024
+    );
+
+    ctx.font = "800px serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    ctx.fillText(
+        emoji,
+        512,
+        512
+    );
+
+    const texture =
+        new THREE.CanvasTexture(
+            canvas
+        );
+
+    texture.needsUpdate = true;
+
+    return texture;
+}
+
+window.changeEmoji =
+function(emoji){
+
+    if(!faceMesh)
+        return;
+
+    faceMesh.material.map =
+        createEmojiTexture(
+            emoji
+        );
+
+    faceMesh.material.needsUpdate =
+        true;
+};
 /* ---------------------- */
 /* THREE */
 /* ---------------------- */
@@ -354,9 +413,9 @@ async ()=>{
     geometry.computeVertexNormals();
 
     const texture =
-        new THREE.CanvasTexture(
-            captureCanvas
-        );
+    createEmojiTexture(
+        "😀"
+    );
 
     texture.flipY = false;
     texture.needsUpdate = true;
