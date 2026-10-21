@@ -474,7 +474,7 @@ atlasCtx.fillRect(
     4096
 );
 
-atlasCtx.drawImage(
+/*atlasCtx.drawImage(
     faceCanvas,
 
     700,
@@ -482,7 +482,24 @@ atlasCtx.drawImage(
 
     2400,
     2600
-);
+);*/
+
+    for(let y=0;y<16;y++){
+    for(let x=0;x<16;x++){
+
+        atlasCtx.fillStyle =
+        (x+y)%2
+        ? "#ffffff"
+        : "#000000";
+
+        atlasCtx.fillRect(
+            x*256,
+            y*256,
+            256,
+            256
+        );
+    }
+}
 
 const texture =
 new THREE.CanvasTexture(
