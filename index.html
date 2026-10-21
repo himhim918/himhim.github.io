@@ -261,7 +261,7 @@ FACEMESH_TESSELATION.length
 
 const vertices = [];
 
-for(const edge of FACEMESH_TESSELATION){
+/*for(const edge of FACEMESH_TESSELATION){
 
 const p1 =
 landmarks[edge[0]];
@@ -280,39 +280,67 @@ vertices.push(
 -(p2.y-0.5)*2,
 p2.z*2
 );
+}*/
+
+const positions = [];
+const uvs = [];
+
+for(const p of landmarks){
+
+    positions.push(
+        (p.x - 0.5) * 2,
+        -(p.y - 0.5) * 2,
+        p.z * 2
+    );
+
+    uvs.push(
+        p.x,
+        1.0 - p.y
+    );
 }
 
 const geometry =
 new THREE.BufferGeometry();
 
 geometry.setAttribute(
-"position",
-new THREE.Float32BufferAttribute(
-vertices,
-3
-)
+    "position",
+    new THREE.Float32BufferAttribute(
+        positions,
+        3
+    )
+);
+
+geometry.setAttribute(
+    "uv",
+    new THREE.Float32BufferAttribute(
+        uvs,
+        2
+    )
+);
+
+geometry.setIndex(
+    TRIANGULATION
+);
+geometry.setIndex(TRIANGULATION);
+
+geometry.computeVertexNormals();
+
+    
+const texture =
+new THREE.CanvasTexture(
+    captureCanvas
 );
 
 const material =
-new THREE.LineBasicMaterial({
-color:0x00ff88
+new THREE.MeshBasicMaterial({
+    map:texture,
+    side:THREE.DoubleSide
 });
 
-if(faceWireframe){
-
-scene.remove(
-faceWireframe
-);
-
-faceWireframe.geometry.dispose();
-faceWireframe.material.dispose();
-
-}
-
 faceWireframe =
-new THREE.LineSegments(
-geometry,
-material
+new THREE.Mesh(
+    geometry,
+    material
 );
 
 scene.add(
