@@ -340,10 +340,9 @@ alert(
 scene.traverse((obj)=>{
     if(obj.isMesh){
         console.log(
-            "mesh:",
-            obj.name,
-            obj.geometry.attributes.position.count
-        );
+        obj.name,
+        obj.material.map
+    );
     }
 });
 
