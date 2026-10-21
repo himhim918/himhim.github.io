@@ -424,11 +424,17 @@ faceCtx.fillRect(
     1024
 );
 
-const sx = minX;
-const sy = minY + cropH * 0.10;
+const centerX = (minX + maxX) * 0.5;
+const centerY = (minY + maxY) * 0.5;
 
-const sw = cropW;
-const sh = cropH * 0.80;
+// 放大倍率
+const size =
+Math.max(cropW, cropH) * 0.85;
+
+const sx = centerX - size * 0.5;
+const sy = centerY - size * 0.5;
+const sw = size;
+const sh = size;
 
 faceCtx.drawImage(
     captureCanvas,
@@ -436,10 +442,10 @@ faceCtx.drawImage(
     sy,
     sw,
     sh,
-    100,
-    50,
-    824,
-    924
+    0,
+    0,
+    1024,
+    1024
 );
 
 faceCtx.globalCompositeOperation =
