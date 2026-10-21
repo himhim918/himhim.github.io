@@ -336,9 +336,6 @@ result.detections.length===0
 alert(
 "No face detected"
 );
-
-
-    
 return;
 }
 
@@ -351,38 +348,31 @@ document.createElement(
 "canvas"
 );
 
-faceCanvas.width = 4096;
-faceCanvas.height = 4096;
+const atlas =
+document.createElement("canvas");
+
+atlas.width = 4096;
+atlas.height = 4096;
+
+const ctx = atlas.getContext("2d");
+
+ctx.fillStyle="#666";
+ctx.fillRect(0,0,4096,4096);
+
+ctx.drawImage(
+    faceCanvas,
+    700,
+    150,
+    2400,
+    2600
+);
+
+const texture =
+new THREE.CanvasTexture(atlas);
 
 const faceCtx =
 faceCanvas.getContext("2d");
 
-faceCtx.drawImage(
-    captureCanvas,
-    box.originX,
-    box.originY,
-    box.width,
-    box.height,
-
-    1000,
-    800,
-    1600,
-    1800
-);
-
-    faceCtx.drawImage(
-    captureCanvas,
-    box.originX,
-    box.originY,
-    box.width,
-    box.height,
-
-    1000,
-    800,
-    1600,
-    1800
-);
-    
 faceCtx.fillStyle =
 "#808080";
 
@@ -443,7 +433,7 @@ true;
 
 }else{
 
-/*const oldUv = faceMesh.geometry.attributes.uv;
+const oldUv = faceMesh.geometry.attributes.uv;
 
 const newUv = new Float32Array(oldUv.count * 2);
 
@@ -457,36 +447,8 @@ faceMesh.geometry.setAttribute(
 );
 
 faceMesh.material.map = texture;
-faceMesh.material.needsUpdate = true;*/
-
-
-    const c = document.createElement("canvas");
-c.width = 1024;
-c.height = 1024;
-
-const g = c.getContext("2d");
-
-g.fillStyle = "white";
-g.fillRect(0,0,1024,1024);
-
-g.strokeStyle = "red";
-
-for(let i=0;i<1024;i+=100){
-  g.beginPath();
-  g.moveTo(i,0);
-  g.lineTo(i,1024);
-  g.stroke();
-
-  g.beginPath();
-  g.moveTo(0,i);
-  g.lineTo(1024,i);
-  g.stroke();
-}
-
-const tex = new THREE.CanvasTexture(c);
-
-faceMesh.material.map = tex;
 faceMesh.material.needsUpdate = true;
+    
 }
 };
 
