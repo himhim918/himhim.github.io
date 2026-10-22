@@ -498,14 +498,47 @@ atlasCtx.fillRect(
     4096,
     4096
 );
+    
+const stretchCanvas =
+document.createElement("canvas");
+
+stretchCanvas.width = 1024;
+stretchCanvas.height = 1024;
+
+const stretchCtx =
+stretchCanvas.getContext("2d");
+
+// 水平放大
+stretchCtx.drawImage(
+    faceCanvas,
+
+    0,
+    0,
+    1024,
+    1024,
+
+    -20,     // 往左拉
+    0,
+    1264,    // 比1024寬
+    1024
+);
 
 atlasCtx.drawImage(
-    faceCanvas,
+    stretchCanvas,
     1150,
     1950,
     1800,
     2200
 );
+
+    
+/*atlasCtx.drawImage(
+    faceCanvas,
+    1150,
+    1950,
+    1800,
+    2200
+);*/
 
     
 const texture =
